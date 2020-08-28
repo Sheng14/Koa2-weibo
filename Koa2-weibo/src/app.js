@@ -9,34 +9,34 @@ const logger = require('koa-logger')
 const index = require('./routes/index')
 const users = require('./routes/users')
 
-// error handler
+// error handler  监听错误并且在页面显示
 onerror(app)
 
-// middlewares
+// middlewares 处理post数据
 app.use(bodyparser({
   enableTypes:['json', 'form', 'text']
 }))
 app.use(json())
 app.use(logger())
-app.use(require('koa-static')(__dirname + '/public'))
+app.use(require('koa-static')(__dirname + '/public')) // 将前端部分放到静态资源中，就可以通过url访问到如：http://localhost:3000/stylesheets/style.css
 
 app.use(views(__dirname + '/views', {
   extension: 'ejs'
-}))
+})) // 注册ejs，不然到时编译无法识别出来
 
-// logger
-app.use(async (ctx, next) => {
+// logger 这里可以说就是手写的一个中间件，与之前的logger重复，可以不要。
+/*app.use(async (ctx, next) => {
   const start = new Date()
   await next()
   const ms = new Date() - start
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
-})
+})*/
 
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 
-// error-handling
+// error-handling 监听错误并且打印出来
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
 });
