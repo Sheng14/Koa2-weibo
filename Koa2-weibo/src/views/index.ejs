@@ -7,13 +7,16 @@
   <body>
     <h1><%= title %></h1>
     <p>EJS Welcome to <%= title %></p>
-    <p><%= msg %></p>
-    <div>
-      <% if (isMe) { %>
-        <a href="#">欢迎来到竞技场，神抽狗</a>
-      <% } else { %>
-        <a href="#">请先登录，勇士</a>
-      <% } %>
-    </div>
+    <p><%= locals.msg %></p>
+    <br/>
+    <hr/>
+    <%- include('widgets/user-info', {
+      isMe
+    }) %>
+    <br/>
+    <hr/>
+    <%- include('widgets/blog-list', {
+      blogList
+    }) %>
   </body>
 </html>
