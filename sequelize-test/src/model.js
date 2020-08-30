@@ -17,7 +17,32 @@ const User = seq.define('user', { // user是表名（自动变为复数） id自
     }
 })
 
+// 创建blog模型/表，表的名字是blogs
+const Blog = seq.define('blog', {
+    title: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    content: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    }
+})
+
+// 关联外键（两种方法都可以，都写有利于查询）
+Blog.belongsTo(User, {
+    foreignKey: 'userId' //只需要传入自己的外键即可，id是自动默认的
+})
+User.hasMany(Blog, {
+    foreignKey: 'userId' // 只需要传入被关联者的外键即可，id是自动默认的
+})
+
 module.exports = {
-    User
+    User,
+    Blog
 }
 // 所以这里就是负责定义模型/表
