@@ -45,3 +45,4 @@ const { Blog, User } =  require('./model')
       userId: bubingId
   })
 })()
+// 这个就是负责插入数据
