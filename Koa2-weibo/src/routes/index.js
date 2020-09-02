@@ -27,14 +27,14 @@ router.get('/string', async (ctx, next) => {
 })
 
 router.get('/json', async (ctx, next) => {
-  const session = ctx.session // 拿到session
+ /* const session = ctx.session // 拿到session
   if (session.viewNum == null) { // 加一个访问次数
     session.viewNum = 0
   }
-  session.viewNum++
+  session.viewNum++*/
   ctx.body = {
-    title: 'koa2 json',
-    viewNum: session.viewNum
+    title: 'koa2 json'/*,
+    viewNum: session.viewNum*/
   }
 })
 
