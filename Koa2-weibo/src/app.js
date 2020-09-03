@@ -8,12 +8,22 @@ const logger = require('koa-logger')
 const session = require('koa-generic-session')
 const redisStore = require('koa-redis')
 const { REDIS_CONF } = require('./conf/db')
+const { isPrd }  = require('./utils/env')
 
+// 引入路由
 const index = require('./routes/index')
 const users = require('./routes/users')
+const errorViewRouter = require('./routes/view/error')
 
 // error handler  监听错误并且在页面显示
-onerror(app)
+// 动态定义错误配置（开发与上线环境）
+let onerrorConf = {}
+if (isPrd) {
+    onerrorConf = {
+        redirect: '/error' // 如果有报错则重定向到错误页
+    }
+}
+onerror(app, onerrorConf)
 
 // middlewares 处理post数据
 app.use(bodyparser({
@@ -53,6 +63,7 @@ app.use(session({
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
+app.use(errorViewRouter.routes(),errorViewRouter.allowedMethods()) // 404路由必须写在最后才能兜住。
 
 // error-handling 监听错误并且打印出来
 app.on('error', (err, ctx) => {

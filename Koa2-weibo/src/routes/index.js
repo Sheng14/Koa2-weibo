@@ -32,6 +32,7 @@ router.get('/json', async (ctx, next) => {
     session.viewNum = 0
   }
   session.viewNum++*/
+  // throw Error 添加错误来测试刚才的错误路由
     ctx.body = {
         title: 'koa2 json'/*,
       viewNum: session.viewNum*/
