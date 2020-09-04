@@ -4,6 +4,7 @@
  */
 const seq = require('./seq')
 // require('./model') // 因为暴露的不是表而是整个定义的表所以直接引用就行，相当于把seq.define拿出来
+require('./model/index') // 引入模型的入口文件
 
 seq.authenticate() // 测试连接（返回的是promise）
     .then(() => {
