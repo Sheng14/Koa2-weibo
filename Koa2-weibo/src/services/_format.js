@@ -1,8 +1,9 @@
 /**
- * @description 格式化数据
+ * @description 格式化数据（私有）
  * @author Shneng14
  */
 
+const { DEFAULT_PICTURE }  = require('../conf/constant')
 
 /**
  * 格式化用户头像
@@ -10,7 +11,7 @@
  */
 function _formatUserPicture (obj) { // 私有方法交由格式化用户信息一块调用
     if (obj.picture == null) { // 如果用户信息里面没有头则给个头像
-        obj.picture = 'https://dwz.cn/rnTnfiZs'
+        obj.picture = DEFAULT_PICTURE
     }
     return obj
 }

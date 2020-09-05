@@ -4,6 +4,7 @@
  */
 
 const { User } = require('../db/model/index') // 引入模型
+const { formatUser } = require('../services/_format') // 引入格式化函数 
  /**
   * 获取用户信息
   * @param {string} username 用户名
@@ -25,9 +26,9 @@ async function getUserInfo (username, password) {
         return result
     }
 
-    // 格式化
-
-    return result.dataValues // 如果查得到就把值返回
+    //  如果查得到就把值返回且格式化
+    const formatResult = formatUser(result.dataValues)
+    return formatResult
 }
 
 module.exports = {
