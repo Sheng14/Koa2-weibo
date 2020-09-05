@@ -62,7 +62,7 @@ app.use(session({
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })*/
 
-// routes
+// routes 注册路由
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
