@@ -9,6 +9,7 @@ const session = require('koa-generic-session')
 const redisStore = require('koa-redis')
 const { REDIS_CONF } = require('./conf/db')
 const { isPrd }  = require('./utils/env')
+const { SESSION_SECRET_KEY } = require('./conf/secretKeys')
 
 // 引入路由
 const index = require('./routes/index')
@@ -40,7 +41,7 @@ app.use(views(__dirname + '/views', {
 })) // 注册ejs，不然到时编译无法识别出来，而且要使用模板文件的时候就只需要写ejs的名称即可，其它路径已经在这里注册了
 
 // session配置
-app.keys = ['ODST935#'] // 设置cookie的加密密匙
+app.keys = [SESSION_SECRET_KEY] // 设置cookie的加密密匙
 app.use(session({
     key: 'weibo.sid', // 配置cookie的名称
     prefix: 'weibo:scss', // 配置redis key的前缀

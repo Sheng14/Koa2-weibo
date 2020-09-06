@@ -10,6 +10,7 @@ const {
     registerUserNameExistInfo,
     registerFailInfo
 } = require('../model/Errnoinfo')
+const { doCtypto } = require('../utils/cryp')
 /**
  * 用户名是否存在
  * @param {string} username 
@@ -40,7 +41,7 @@ async function register ({ userName, password, gender }) {
     try {
         await createUser({ // 调用service层的创建用户方法注入数据库
             userName,
-            password,
+            password: doCtypto(password), // 加密
             gender
         })
         return new SuccessModel()
