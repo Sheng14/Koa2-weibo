@@ -5,11 +5,13 @@
 
 const router = require('koa-router')()
 const { isExist, register } = require('../../controller/user')
+const { userValidate } = require('../../validator/user') // 引入校验函数
+const { genValidator } = require('../../middlewares/validator') // 引入可添加校验函数的校验中间件
 
 router.prefix('/api/user')
 
 // 注册用户
-router.post('/register', async (ctx, next) => {
+router.post('/register', genValidator(userValidate), async (ctx, next) => {
     const { userName, password, gender } = ctx.request.body // 获取要注册的用户信息
     ctx.body = await register({userName, password, gender}) // 解构方式传值调用controller里面的注册函数
 })

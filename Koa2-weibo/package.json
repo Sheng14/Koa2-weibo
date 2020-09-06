@@ -9,6 +9,7 @@
     "lint": "eslint --ext .js ./src"
   },
   "dependencies": {
+    "ajv": "^6.12.4",
     "babel-eslint": "^10.1.0",
     "cross-env": "^7.0.2",
     "debug": "^4.1.1",
