@@ -1,6 +1,7 @@
 const router = require('koa-router')()
+const { loginRedirect } = require('../middlewares/loginChecks')
 
-router.get('/', async (ctx, next) => {
+router.get('/', loginRedirect, async (ctx, next) => {
     await ctx.render('index', { // 异步读取模板文件（因为IO操作啊） 这个就是找到index.ejs咯，然后发送下面的数据给那里的变量！
         title: 'Hello Koa 2!',
         msg: '大家好，我是天天神抽',
@@ -22,7 +23,7 @@ router.get('/', async (ctx, next) => {
     })
 })
 
-router.get('/string', async (ctx, next) => {
+router.get('/string', loginRedirect, async (ctx, next) => {
     ctx.body = 'koa2 string'
 })
 
