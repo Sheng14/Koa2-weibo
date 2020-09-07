@@ -8,7 +8,8 @@ const { getUserInfo, createUser } = require('../services/user')
 const { 
     registerUserNameNotExistInfo,
     registerUserNameExistInfo,
-    registerFailInfo
+    registerFailInfo,
+    loginFailInfo
 } = require('../model/Errnoinfo')
 const { doCtypto } = require('../utils/cryp')
 /**
@@ -51,7 +52,26 @@ async function register ({ userName, password, gender }) {
     }
 }
 
+/**
+ * 用户登录
+ * @param {Object} ctx koa2 ctx 
+ * @param {String} userName 用户名
+ * @param {String} password 密码
+ */
+async function login(ctx, userName, password) {
+    const userInfo = await getUserInfo(userName, doCtypto(password)) // 获取用户信息（要加密才能获取到）并且判断是否存在来检验登录成功与否
+    if (!userInfo) {
+        return new ErrnoModel(loginFailInfo)
+    }
+    // 登录成功则填充到session
+    if (ctx.session.userInfo == null) {
+        ctx.session.userInfo = userInfo
+    }
+    return new SuccessModel()
+}
+
 module.exports = {
     isExist,
-    register
+    register,
+    login
 }

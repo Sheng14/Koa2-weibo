@@ -17,7 +17,7 @@ async function getUserInfo (userName, password) {
     if (password) { // 如果有传password，加多一个查询条件
         Object.assign(whereOpt, { password })
     }
-    const result = User.findOne({ // 查询数据库
+    const result = await User.findOne({ // 查询数据库 一定不能忘记await啊啊啊啊！
         attributes: ['id', 'userName', 'nickName', 'picture', 'city'],
         where: whereOpt
     })
