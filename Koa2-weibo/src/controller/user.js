@@ -4,12 +4,13 @@
  */
 
 const { SuccessModel, ErrnoModel } = require('../model/ResModel')
-const { getUserInfo, createUser } = require('../services/user')
+const { getUserInfo, createUser, deleteUser } = require('../services/user')
 const { 
     registerUserNameNotExistInfo,
     registerUserNameExistInfo,
     registerFailInfo,
-    loginFailInfo
+    loginFailInfo,
+    deleteUserFailInfo
 } = require('../model/Errnoinfo')
 const { doCtypto } = require('../utils/cryp')
 /**
@@ -70,8 +71,21 @@ async function login(ctx, userName, password) {
     return new SuccessModel()
 }
 
+/**
+ * 删除当前用户
+ * @param {String} userName 用户名
+ */
+async function deleteCurUser(userName) {
+    const result = await deleteUser(userName)
+    if (result) { // 删除成功
+        return new SuccessModel()
+    } // 删除失败
+    return new ErrnoModel(deleteUserFailInfo)
+}
+
 module.exports = {
     isExist,
     register,
-    login
+    login,
+    deleteCurUser
 }
