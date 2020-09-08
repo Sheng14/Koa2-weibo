@@ -53,12 +53,12 @@ async function createUser ({ userName, password, gender=3, nickName }) {
  * @param {String} userName 用户名 
  */
 async function deleteUser(userName) {
-    const result = User.destroy({
+    const result = await User.destroy({
         where: {
-            userName
+            userName // 删除对应用户名的数据
         }
     })
-    return result > 0
+    return result > 0 // 返回的是受影响的函数，与0比返回一个布尔值！
 }
 
 module.exports = {
