@@ -33,7 +33,7 @@ async function saveFile ({ size, name, filePath, type }) {
         await fse.remove(filePath)
         return new ErrorModel(uploadFileSizeFailInfo)
     }
-    const fileName = Date.now + '.' + name // 重命名，防止重名
+    const fileName = Date.now() + '.' + name // 重命名，防止重名
     const distFilePath = path.join(DIST_FOLDER_PATH, fileName) // 文件的具体路径
     await fse.move(filePath, distFilePath) // 移动文件到上面的路径
     return new SuccessModel({

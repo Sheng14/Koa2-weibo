@@ -4,7 +4,7 @@
  */
 
 const router = require('koa-router')()
-const { isExist, register, login, deleteCurUser } = require('../../controller/user')
+const { isExist, register, login, deleteCurUser, changeUserInfo } = require('../../controller/user')
 const { userValidate } = require('../../validator/user') // 引入校验函数
 const { genValidator } = require('../../middlewares/validator') // 引入可添加校验函数的校验中间件
 const { isTest } = require('../../utils/env')
@@ -38,6 +38,12 @@ router.post('/delete', loginCheck, async (ctx, next) => {
         const { userName } = ctx.session.userInfo // 且只能删除自己
         ctx.body = await deleteCurUser(userName)
     }
+})
+
+// 更新用户信息
+router.patch('/changeInfo', loginCheck, genValidator(userValidate), async (ctx, next) => {
+    const { nickName, city, picture } = ctx.request.body
+    ctx.body = await changeUserInfo(ctx, { nickName, city,picture })
 })
 
 module.exports = router

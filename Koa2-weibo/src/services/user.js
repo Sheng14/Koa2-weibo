@@ -61,8 +61,50 @@ async function deleteUser(userName) {
     return result > 0 // 返回的是受影响的函数，与0比返回一个布尔值！
 }
 
+
+/**
+ * 获取用户信息
+ * @param {string} userName 用户名
+ * @param {string} password 密码
+ */
+async function updateUser (
+    { newPassword, newNickName, newPicture, newCity },
+    { userName, password }
+) {
+    // 拼接修改的内容
+    const updateData = {}
+    if (newPassword) {
+        updateData.password = newPassword
+    }
+    if (newNickName) {
+        updateData.nickName = newNickName
+    }
+    if (newPicture) {
+        updateData.picture = newPicture
+    }
+    if (newCity) {
+        updateData.city = newCity
+    }
+
+    // 拼接查询条件
+    const whereData = {
+        userName
+    }
+    if (password) {
+        whereData.password = password
+    }
+
+    // 执行更新
+    const result = await User.update(updateData, {
+        where: whereData
+    })
+    
+    return result[0] > 0
+}
+
 module.exports = {
     getUserInfo,
     createUser,
-    deleteUser
+    deleteUser,
+    updateUser
 }

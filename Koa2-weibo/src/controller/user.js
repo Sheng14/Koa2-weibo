@@ -4,13 +4,14 @@
  */
 
 const { SuccessModel, ErrnoModel } = require('../model/ResModel')
-const { getUserInfo, createUser, deleteUser } = require('../services/user')
+const { getUserInfo, createUser, deleteUser, updateUser } = require('../services/user')
 const { 
     registerUserNameNotExistInfo,
     registerUserNameExistInfo,
     registerFailInfo,
     loginFailInfo,
-    deleteUserFailInfo
+    deleteUserFailInfo,
+    changeInfoFailInfo
 } = require('../model/Errnoinfo')
 const { doCtypto } = require('../utils/cryp')
 /**
@@ -83,9 +84,41 @@ async function deleteCurUser(userName) {
     return new ErrnoModel(deleteUserFailInfo)
 }
 
+/**
+ * 修改个人信息
+ * @param {Object} ctx ctx
+ * @param {string} nickName 昵称
+ * @param {string} city 城市
+ * @param {string} picture 头像
+ */
+async function changeUserInfo (ctx, {nickName, city, picture}) {
+    const { userName } = ctx.session.userInfo
+    if (!nickName) {
+        nickName = userName
+    }
+    const result = await updateUser(
+        {
+            newNickName: nickName,
+            newCity: city,
+            newPicture: picture
+        },
+        { userName }
+    )
+    if (result) { // 成功更新则需要更新session
+        Object.assign(ctx.session.userInfo, {
+            nickName,
+            city,
+            picture
+        })
+        return new SuccessModel()
+    }
+    return new ErrnoModel(changeInfoFailInfo)
+}
+
 module.exports = {
     isExist,
     register,
     login,
-    deleteCurUser
+    deleteCurUser,
+    changeUserInfo
 }
