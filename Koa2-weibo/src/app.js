@@ -10,6 +10,8 @@ const redisStore = require('koa-redis')
 const { REDIS_CONF } = require('./conf/db')
 const { isPrd }  = require('./utils/env')
 const { SESSION_SECRET_KEY } = require('./conf/secretKeys')
+const koaStatic = require('koa-static')
+const path = require('path')
 
 // 引入路由
 const index = require('./routes/index')
@@ -17,6 +19,7 @@ const users = require('./routes/users')
 const errorViewRouter = require('./routes/view/error')
 const userViewRouter = require('./routes/view/user')
 const userApiRouter = require('./routes/api/users')
+const utilsApiRouter = require('./routes/api/utils')
 
 // error handler  监听错误并且在页面显示
 // 动态定义错误配置（开发与上线环境）
@@ -34,7 +37,8 @@ app.use(bodyparser({
 }))
 app.use(json())
 app.use(logger())
-app.use(require('koa-static')(__dirname + '/public')) // 将前端部分放到静态资源中，就可以通过url访问到如：http://localhost:3000/stylesheets/style.css
+app.use(koaStatic(__dirname + '/public')) // 将前端部分放到静态资源中，就可以通过url访问到如：http://localhost:3000/stylesheets/style.css
+app.use(koaStatic(path.join(__dirname, '..', 'uploadFiles'))) // 这里是为上传文件定义一个可以通过静态资源访问的路径
 
 app.use(views(__dirname + '/views', {
     extension: 'ejs'
@@ -68,6 +72,7 @@ app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
 app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
+app.use(utilsApiRouter.routes(), utilsApiRouter.allowedMethods())
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods()) // 404路由必须写在最后才能兜住。
 
 // error-handling 监听错误并且打印出来
