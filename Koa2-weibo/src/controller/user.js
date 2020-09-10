@@ -92,7 +92,7 @@ async function deleteCurUser(userName) {
  * @param {string} city 城市
  * @param {string} picture 头像
  */
-async function changeUserInfo (ctx, {nickName, city, picture}) {
+async function changeUserInfo (ctx, { nickName, city, picture }) {
     const { userName } = ctx.session.userInfo
     if (!nickName) {
         nickName = userName
@@ -138,7 +138,16 @@ async function changePassword (userName, password, newPassword) {
     } else {
         return new ErrnoModel(changePasswordFailInfo)
     }
-} 
+}
+
+/**
+ * 退出登录
+ * @param {Object} ctx 
+ */
+async function logout (ctx) {
+    delete ctx.session.userInfo // 直接删除session里面的个人信息就可以了，系统会检测到没有登录
+    return new SuccessModel()
+}
 
 module.exports = {
     isExist,
@@ -146,5 +155,6 @@ module.exports = {
     login,
     deleteCurUser,
     changeUserInfo,
-    changePassword
+    changePassword,
+    logout
 }
