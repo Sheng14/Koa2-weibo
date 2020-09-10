@@ -11,7 +11,8 @@ const {
     registerFailInfo,
     loginFailInfo,
     deleteUserFailInfo,
-    changeInfoFailInfo
+    changeInfoFailInfo,
+    changePasswordFailInfo
 } = require('../model/Errnoinfo')
 const { doCtypto } = require('../utils/cryp')
 /**
@@ -115,10 +116,35 @@ async function changeUserInfo (ctx, {nickName, city, picture}) {
     return new ErrnoModel(changeInfoFailInfo)
 }
 
+/**
+ * 修改用户密码
+ * @param {String} userName  用户名
+ * @param {String} password  当前密码
+ * @param {String} newPassword  新密码
+ */
+async function changePassword (userName, password, newPassword) {
+    const result = await updateUser(
+        {
+            newPassword: doCtypto(newPassword) // 记得加密
+        },
+        {
+            userName,
+            password: doCtypto(password)
+        }
+    )
+
+    if (result) {
+        return new SuccessModel()
+    } else {
+        return new ErrnoModel(changePasswordFailInfo)
+    }
+} 
+
 module.exports = {
     isExist,
     register,
     login,
     deleteCurUser,
-    changeUserInfo
+    changeUserInfo,
+    changePassword
 }

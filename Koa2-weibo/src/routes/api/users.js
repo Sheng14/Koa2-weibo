@@ -4,7 +4,7 @@
  */
 
 const router = require('koa-router')()
-const { isExist, register, login, deleteCurUser, changeUserInfo } = require('../../controller/user')
+const { isExist, register, login, deleteCurUser, changeUserInfo, changePassword } = require('../../controller/user')
 const { userValidate } = require('../../validator/user') // 引入校验函数
 const { genValidator } = require('../../middlewares/validator') // 引入可添加校验函数的校验中间件
 const { isTest } = require('../../utils/env')
@@ -44,6 +44,13 @@ router.post('/delete', loginCheck, async (ctx, next) => {
 router.patch('/changeInfo', loginCheck, genValidator(userValidate), async (ctx, next) => {
     const { nickName, city, picture } = ctx.request.body
     ctx.body = await changeUserInfo(ctx, { nickName, city,picture })
+})
+
+// 修改密码
+router.patch('/changePassword', loginCheck, genValidator(userValidate), async (ctx, next) => {
+    const { password, newPassword } = ctx.request.body
+    const { userName } = ctx.session.userInfo // 获取需要的参数然后直接调用controller的函数更新密码即可
+    ctx.body = await changePassword(userName, password, newPassword)
 })
 
 module.exports = router
