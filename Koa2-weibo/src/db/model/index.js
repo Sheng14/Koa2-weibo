@@ -4,7 +4,15 @@
  */
 
 const User = require('./User')
+const Blog = require('./Blog')
+
+// 关联外键（多对一的关系）
+Blog.belongsTo(User, {
+    foreignKey: 'userId'
+})
+
 
 module.exports = {
-    User
+    User,
+    Blog
 }
