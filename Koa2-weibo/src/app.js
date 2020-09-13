@@ -14,12 +14,12 @@ const koaStatic = require('koa-static')
 const path = require('path')
 
 // 引入路由
-const index = require('./routes/index')
 const users = require('./routes/users')
 const errorViewRouter = require('./routes/view/error')
 const userViewRouter = require('./routes/view/user')
 const userApiRouter = require('./routes/api/users')
 const utilsApiRouter = require('./routes/api/utils')
+const blogViewRouter = require('./routes/view/blog')
 
 // error handler  监听错误并且在页面显示
 // 动态定义错误配置（开发与上线环境）
@@ -68,11 +68,11 @@ app.use(session({
 })*/
 
 // routes 注册路由
-app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
 app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
 app.use(utilsApiRouter.routes(), utilsApiRouter.allowedMethods())
+app.use(blogViewRouter.routes(), blogViewRouter.allowedMethods())
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods()) // 404路由必须写在最后才能兜住。
 
 // error-handling 监听错误并且打印出来
