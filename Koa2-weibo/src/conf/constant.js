@@ -4,5 +4,6 @@
  */
 
 module.exports = {
-    DEFAULT_PICTURE: 'https://dwz.cn/rnTnfiZs'
+    DEFAULT_PICTURE: 'https://dwz.cn/rnTnfiZs',
+    PAGE_SIZE: 5
 }
