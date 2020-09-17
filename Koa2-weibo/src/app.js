@@ -21,6 +21,7 @@ const userApiRouter = require('./routes/api/users')
 const utilsApiRouter = require('./routes/api/utils')
 const blogViewRouter = require('./routes/view/blog')
 const blogHomeApiRouter = require('./routes/api/blog-home')
+const profileApiRouter = require('./routes/api/blog-profile')
 
 // error handler  监听错误并且在页面显示
 // 动态定义错误配置（开发与上线环境）
@@ -75,6 +76,7 @@ app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
 app.use(utilsApiRouter.routes(), utilsApiRouter.allowedMethods())
 app.use(blogViewRouter.routes(), blogViewRouter.allowedMethods())
 app.use(blogHomeApiRouter.routes(), blogHomeApiRouter.allowedMethods())
+app.use(profileApiRouter.routes(), profileApiRouter.allowedMethods())
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods()) // 404路由必须写在最后才能兜住。
 
 // error-handling 监听错误并且打印出来
