@@ -19,7 +19,7 @@ async function getProfileBlogList (userName, pageIndex=0) {
         pageSize: PAGE_SIZE // 引入默认的展示页数
     })
     const blogList = result.blogList
-    
+    console.log('controller:'+blogList)
     // 发送给路由
     return new SuccessModel({
         isEmpty: blogList.length === 0,

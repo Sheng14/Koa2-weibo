@@ -25,7 +25,8 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
 
     // 调用函数拿到需要的各种数据
     const result = await getProfileBlogList(currentName, 0)
-    const { isEmpty, blogList, pageSize, pageIndex, count } = result
+    const { isEmpty, blogList, pageSize, pageIndex, count } = result.data // 少传了一个data妈的
+    console.log('router' + blogList)
     // 返回给前端模板
     await ctx.render('profile', {
         blogData: {
@@ -33,7 +34,8 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
             blogList,
             pageSize,
             pageIndex,
-            count
+            count,
+            currentName
         }
     })
 })
