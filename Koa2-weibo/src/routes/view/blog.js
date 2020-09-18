@@ -51,8 +51,7 @@ router.get('/square', loginRedirect, async (ctx, next) => {
             blogList,
             pageSize,
             pageIndex,
-            count,
-            currentName
+            count
         }
     })
 })

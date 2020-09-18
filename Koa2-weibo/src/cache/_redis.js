@@ -22,7 +22,7 @@ redisClient.on('error', (error) => {
  */
 function set (key, value, timeout = 60*60) {
     if (typeof value === 'object') { // 如果值是对象我们转化为字符串
-        JSON.stringify(value)
+       value = JSON.stringify(value)
     }
     redisClient.set(key, value)
     redisClient.expire(key, timeout) // 设置过期时间
