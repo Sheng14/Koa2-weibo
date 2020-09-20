@@ -24,7 +24,7 @@
                         pageIndex: blogData.pageIndex,
                         count: blogData.count,
                         containerSelector: '#container-weibo-list',
-                        api: '/api/profile/loadMore/' + blogData.currentName <!--userData.userInfo.userName-->,
+                        api: '/api/profile/loadMore/' + userData.userInfo.userName,
                     })%>
                 <% } %> <!-- 加载更多 结束 -->
             <% } %>
@@ -32,13 +32,20 @@
 
         <!-- 右侧 -->
         <div class="col-4">
-            <!-- 个人信息 
+            <!-- 个人信息-->
             <div class="right-item">
+                <%- include('widgets/user-info', {
+                    userInfo: userData.userInfo,
+                    isMe: userData.isMe
+                });%>
+            </div>
 
-            </div>-->
+            <!-- 粉丝 -->
+            <%- include('widgets/fans', {
+                count: userData.fansData.count,
+                userList: userData.fansData.list
+            })%>
 
-            <!-- 粉丝 
--->
 
             <!-- 关注 
 -->
