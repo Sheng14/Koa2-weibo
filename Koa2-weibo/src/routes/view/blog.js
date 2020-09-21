@@ -8,6 +8,7 @@ const { loginRedirect } = require('../../middlewares/loginChecks')
 const { getProfileBlogList } = require('../../controller/blog-profile')
 const { getSquareBlogList } = require('../../controller/blog-square')
 const { getFans } = require('../../controller/user-relation')
+const { isExist } = require('../../controller/user')
 
 // 首页
 router.get('/', loginRedirect, async (ctx, next) => { // 真正的微博首页
@@ -22,11 +23,11 @@ router.get('/profile', loginRedirect, async (ctx, next) => {
 
 // 个人主页（动态）
 router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
-        // 已登录用户的信息
+        // 已登录用户的信息(自己的名字)
         const myUserInfo = ctx.session.userInfo
-        const myUserName = myUserInfo.userName
+        const myUserName = myUserInfo.userName // 所以myUserName必定是自己，这个登录的用户，而curUserName根据访问的主页不同显示的当前用户
 
-    // 获取当前个人主页的用户名（才能知道具体是查谁）
+    // 获取当前个人主页的用户名（才能知道具体是查谁，就不一定是自己的，可能访问了别的用户）
     let curUserInfo
     const { userName: curUserName } = ctx.params
     const isMe = myUserName === curUserName
@@ -49,9 +50,14 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
     const { isEmpty, blogList, pageSize, pageIndex, count } = result.data // 少传了一个data妈的
     console.log('router' + blogList)
 
-    // 获取粉丝（直接去调用controller里面的数据即可）
+    // 获取粉丝（直接去调用controller里面的数据即可，粉丝是当前主页用户的粉丝）
     const fansResult = await getFans(curUserInfo.id)
     const { count: fansCount, fansList } = fansResult.data // 加上fans以示区别，不然会与其它的冲突（count故意没有返回fans开头，展示解构重命名）
+
+    // 判断当前用户（我自己）在访问其它用户的时候，我是否关注了这个用户
+    const amIFollowed = fansList.some((item) => {
+        return item.userName === myUserName
+    })
 
     // 返回给前端模板
     await ctx.render('profile', {
@@ -66,6 +72,7 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
         userData: {
             userInfo: curUserInfo,
             isMe,
+            amIFollowed,
             fansData: {
                 count: fansCount,
                 list: fansList

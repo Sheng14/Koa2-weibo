@@ -28,7 +28,7 @@ $(function () {
   var $btnUnFollow = $('#btn-un-follow')
   if (<%= !isMe%>) {
       // 不是当前用户，则显示“关注”或者“取消关注”
-      if (<%= locals.amIFollowed%>) {
+      if (<%= locals.userData.amIFollowed%>) {
           $btnUnFollow.show()
       } else {
           $btnFollow.show()
