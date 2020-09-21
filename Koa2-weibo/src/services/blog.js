@@ -1,3 +1,4 @@
+const userRelation = require('../controller/user-relation')
 /**
  * @description 微博的数据库操作
  * @author Sheng14
@@ -58,6 +59,7 @@ async function getBlogListByUser ({ userName, pageIndex=0, pageSize=10 }) {
         blogList
     }
 }
+
 
 module.exports =  {
     createBlog,

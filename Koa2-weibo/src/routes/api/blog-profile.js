@@ -7,9 +7,11 @@ const router = require('koa-router')()
 const { loginCheck } = require('../../middlewares/loginChecks')
 const { getProfileBlogList } = require('../../controller/blog-profile')
 const { getBlogListStr } = require('./../../utils/blog')
+const { follow } = require('../../controller/user-relation')
 
 router.prefix('/api/profile')
 
+// 加载更多
 router.get('/loadMore/:userName/:pageIndex', loginCheck, async (ctx, next) => {
     let { userName, pageIndex } = ctx.params
     pageIndex = parseInt(pageIndex)
@@ -26,5 +28,14 @@ router.get('/loadMore/:userName/:pageIndex', loginCheck, async (ctx, next) => {
 
     ctx.body = result*/
 })
+
+
+// 关注
+router.post('/follow', loginCheck, async (ctx, next) => {
+    const { id: myUserId } = ctx.session.userInfo // 获取当前登录用户的id
+    const { userId: curUserId } = ctx.request.body // 获取当前主页的用户id
+    ctx.body = await follow(myUserId, curUserId)
+})
+
 
 module.exports = router

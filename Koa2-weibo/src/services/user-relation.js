@@ -35,6 +35,22 @@ async function getUsersByFollower (followerId) {
     }
 }
 
+/**
+ * 往用户关系数据库添加一条数据来建立两者的关注
+ * @param {Number} userId 当前登录用户id
+ * @param {Number} followedId 当前主页用户id
+ */
+async function addFollower (userId, followerId) { // 其实就往数据库里加数据而已
+    const result = await UserRelation.create({
+        userId,
+        followerId
+    })
+
+    return result.dataValues
+}
+
+
 module.exports = {
-    getUsersByFollower
+    getUsersByFollower,
+    addFollower
 }
