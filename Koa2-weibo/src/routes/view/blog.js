@@ -7,7 +7,7 @@ const router = require('koa-router')()
 const { loginRedirect } = require('../../middlewares/loginChecks')
 const { getProfileBlogList } = require('../../controller/blog-profile')
 const { getSquareBlogList } = require('../../controller/blog-square')
-const { getFans } = require('../../controller/user-relation')
+const { getFans, getFollowers } = require('../../controller/user-relation')
 const { isExist } = require('../../controller/user')
 
 // 首页
@@ -54,6 +54,11 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
     const fansResult = await getFans(curUserInfo.id)
     const { count: fansCount, fansList } = fansResult.data // 加上fans以示区别，不然会与其它的冲突（count故意没有返回fans开头，展示解构重命名）
 
+    // 获取当前主页的关注人列表
+    const followersResult = await getFollowers(curUserInfo.id)
+    console.log(followersResult.data)
+    const { count: followersCuont, followersList } = followersResult.data
+
     // 判断当前用户（我自己）在访问其它用户的时候，我是否关注了这个用户
     const amIFollowed = fansList.some((item) => {
         return item.userName === myUserName
@@ -76,6 +81,10 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
             fansData: {
                 count: fansCount,
                 list: fansList
+            },
+            followersData: {
+                count: followersCuont,
+                list: followersList
             }
         }
     })

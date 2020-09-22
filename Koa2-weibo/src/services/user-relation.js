@@ -1,3 +1,4 @@
+const userRelation = require('../controller/user-relation')
 /**
  * @description 处理用户关系表数据库
  * @author Sheng14
@@ -36,6 +37,40 @@ async function getUsersByFollower (followerId) {
 }
 
 /**
+ * 从数据库查询当前主页用户的关注者信息
+ * @param {Number} userId 当前主页用户的id
+ */
+async function getFollowersByUser (userId) {
+    const result = await UserRelation.findAndCountAll({
+        order: [
+            ['id', 'desc']
+        ],
+        include: [
+            {
+                model: User,
+                attributes: ['id', 'userName', 'nickName', 'picture']
+            }
+        ],
+        where: {
+            userId
+        }
+    })
+    
+    let userList = result.rows.map(row => row.dataValues)
+
+    userList = userList.map(item => {
+        let user = item.user.dataValues
+        user = formatUser(user)
+        return user
+    })
+
+    return {
+        count: result.count,
+        userList
+    }
+}
+
+/**
  * 往用户关系数据库添加一条数据来建立两者的关注
  * @param {Number} userId 当前登录用户id
  * @param {Number} followedId 当前主页用户id
@@ -49,8 +84,24 @@ async function addFollower (userId, followerId) { // 其实就往数据库里加
     return result.dataValues
 }
 
+/**
+ * 删除关注关系
+ * @param {number} userId 用户 id
+ * @param {number} followerId 被关注用户 id
+ */
+async function deleteFollower(userId, followerId) {
+    const result = await UserRelation.destroy({
+        where: {
+            userId,
+            followerId
+        }
+    })
+    return result > 0
+}
 
 module.exports = {
     getUsersByFollower,
-    addFollower
+    addFollower,
+    deleteFollower,
+    getFollowersByUser
 }

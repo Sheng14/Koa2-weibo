@@ -3,10 +3,10 @@
  * @author Sheng14
  */
 
-const { getUsersByFollower } = require('../services/user-relation') 
+const { getUsersByFollower, getFollowersByUser } = require('../services/user-relation') 
 const { SuccessModel, ErrnoModel } = require('../model/ResModel')
-const { addFollowerFailInfo } = require('../model/Errnoinfo')
-const { addFollower } = require('../services/user-relation')
+const { addFollowerFailInfo, deleteFollowerFailInfo } = require('../model/Errnoinfo')
+const { addFollower, deleteFollower } = require('../services/user-relation')
 
 /**
  * 根据当前用户获取粉丝信息
@@ -17,6 +17,18 @@ async function getFans (userId) {
     return new SuccessModel({
         count,
         fansList: userList
+    })
+}
+
+/**
+ * 根据当前主页用户获取该用户的关注人列表
+ * @param {Number} userId 当前主页的用户
+ */
+async function getFollowers (userId) {
+    const { count, userList } = await getFollowersByUser(userId)
+    return new SuccessModel({
+        count,
+        followersList: userList
     })
 }
 
@@ -35,8 +47,22 @@ async function follow (myUserId, curUserId) {
     }
 }
 
+/**
+ * 取消关注
+ * @param {number} myUserId 当前登录的用户 id
+ * @param {number} curUserId 要被关注的用户 id
+ */
+async function unFollow(myUserId, curUserId) {
+    const result = await deleteFollower(myUserId, curUserId)
+    if (result) {
+        return new SuccessModel()
+    }
+    return new ErrorModel(deleteFollowerFailInfo)
+}
 
 module.exports = {
     getFans,
-    follow
+    follow,
+    unFollow,
+    getFollowers
 }
