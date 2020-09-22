@@ -5,5 +5,11 @@
 
 module.exports = {
     USER_NAME: 'Ace',
-    COOKIE: 'weibo.sid=ujDUWT25s7j4T12MXZZLMSKkmdFn96XQ; weibo.sid.sig=bLR6BXwNUws2LOmyomcAjq9hGLA'
+    COOKIE: 'weibo.sid=nq7dEFfAbNEsvHvvKRZGziqImh4Gtyqo; weibo.sid.sig=6pFi5J2jGkF6uVEEoO_D81HQidI',
+    A_USER_NAME: 'Ace',
+    A_COOKIE: 'weibo.sid=nq7dEFfAbNEsvHvvKRZGziqImh4Gtyqo; weibo.sid.sig=6pFi5J2jGkF6uVEEoO_D81HQidI',
+    A_ID: 1,
+    D_USER_NAME: 'Dark',
+    D_COOKIE: 'weibo.sid=7RE0WuTUnLRJqBZHS0ft9wlJRAUaBZDi; weibo.sid.sig=5E5PFSCC1WehBes5mfdb0cvb95Y',
+    D_ID: 2
 }
