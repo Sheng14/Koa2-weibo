@@ -20,6 +20,11 @@ User.hasMany(UserRelation, {
     foreignKey: 'userId'
 })
 
+Blog.belongsTo(UserRelation, {
+    foreignKey: 'userId', // Blog表的userId
+    targetKey: 'followerId' // UserRelation的followerId
+})
+
 module.exports = {
     User,
     Blog,
