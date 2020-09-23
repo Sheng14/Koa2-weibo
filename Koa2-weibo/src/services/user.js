@@ -5,6 +5,8 @@
 
 const { User } = require('../db/model/index') // 引入模型
 const { formatUser } = require('../services/_format') // 引入格式化函数 
+const { getFollowers } = require('../controller/user-relation')
+const { addFollower } = require('./user-relation')
  /**
   * 获取用户信息
   * @param {string} userName 用户名
@@ -45,7 +47,10 @@ async function createUser ({ userName, password, gender=3, nickName }) {
         nickName:　nickName? nickName : userName,
         gender
     })
-    return result.dataValues
+    const data = result.dataValues
+    // 自己关注自己
+    addFollower(data.id, data.id) 
+    return data
 }
 
 /**

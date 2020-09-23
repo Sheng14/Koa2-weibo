@@ -6,6 +6,7 @@ const userRelation = require('../controller/user-relation')
 
 const { User, UserRelation } = require('../db/model/index')
 const { formatUser } = require('./_format')
+const Sequelize = require('sequelize')
 
 /**
  * 根据当前用户id去获取它的粉丝们的信息
@@ -21,7 +22,10 @@ async function getUsersByFollower (followerId) {
             {
                 model: UserRelation,
                 where: {
-                    followerId // 首先根据当前用户的id拿到对于粉丝的id
+                    followerId, // 首先根据当前用户的id拿到对于粉丝的id
+                    userId: {
+                        [Sequelize.Op.ne]: followerId // 要求我UserRelation表中的的userId不等于followerId
+                    }
                 }
             }
         ]
@@ -52,7 +56,10 @@ async function getFollowersByUser (userId) {
             }
         ],
         where: {
-            userId
+            userId,
+            followerId: {
+                [Sequelize.Op.ne]: userId // 要求我UserRelation表中的的userId不等于followerId
+            }
         }
     })
     
