@@ -9,12 +9,16 @@ const { getProfileBlogList } = require('../../controller/blog-profile')
 const { getSquareBlogList } = require('../../controller/blog-square')
 const { getFans, getFollowers } = require('../../controller/user-relation')
 const { isExist } = require('../../controller/user')
+const { getHomeBlogList } = require('../../controller/blog-home')
 
 // 首页
 router.get('/', loginRedirect, async (ctx, next) => { // 真正的微博首页
     const userInfo = ctx.session.userInfo
     const { id: userId } = userInfo
 
+    // 获取首页第一页数据（关注人和自己的微博，其实就是关注人的微博）
+    const res = await getHomeBlogList(userId)
+    const { isEmpty, blogList, pageSize, pageIndex, count } = res.data //拿到值丢给blogData传给前端用
 
     // 获取粉丝
     const fansResult = await getFans(userId)
@@ -34,7 +38,14 @@ router.get('/', loginRedirect, async (ctx, next) => { // 真正的微博首页
             followersData: {
                 count: followersCount,
                 list: followersList
-            }
+            }            
+        },
+        blogData: {
+            isEmpty,
+            blogList,
+            pageSize,
+            pageIndex,
+            count
         }
     })
 })

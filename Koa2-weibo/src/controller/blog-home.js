@@ -4,9 +4,10 @@
  */
 
 const { SuccessModel, ErrnoModel } = require('../model/ResModel')
-const { createBlog } = require('../services/blog')
+const { createBlog, getFollowersBlogList } = require('../services/blog')
 const { createBlogFailInfo } = require('../model/Errnoinfo')
 const xss = require('xss')
+const { PAGE_SIZE } = require('../conf/constant')
 
 /**
  * 创建微博
@@ -26,6 +27,20 @@ async function create ({ content, image, userId }) {
     }
 }
 
+
+async function getHomeBlogList (userId, pageIndex = 0) {
+    const res = await getFollowersBlogList({userId, pageIndex, PAGE_SIZE})
+    const { count, blogList } = res
+    return new SuccessModel({ // 返回前端首页需要的数据
+        isEmpty: blogList.length === 0,
+        blogList,
+        pageSize: PAGE_SIZE,
+        pageIndex,
+        count
+    })
+}
+
 module.exports = {
-    create
+    create,
+    getHomeBlogList
 }

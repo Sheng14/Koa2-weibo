@@ -1,10 +1,9 @@
-const userRelation = require('../controller/user-relation')
 /**
  * @description 微博的数据库操作
  * @author Sheng14
  */
 
-const { Blog, User } = require('../db/model/index')
+const { Blog, User, UserRelation } = require('../db/model/index')
 const { formatUser } = require('./_format')
 
 /**
@@ -53,7 +52,6 @@ async function getBlogListByUser ({ userName, pageIndex=0, pageSize=10 }) {
         item.user = formatUser(user)
         return item
     })
-
     return {
         count: result.count,
         blogList
@@ -61,7 +59,48 @@ async function getBlogListByUser ({ userName, pageIndex=0, pageSize=10 }) {
 }
 
 
+/**
+ * 获取首页关注人的微博
+ * @param {Object} param0 
+ */
+async function getFollowersBlogList ({userId, pageIndex = 0, pageSize = 10}) {
+    const result = await Blog.findAndCountAll({
+        limit: pageSize, // 分页
+        offset: pageSize * pageIndex, // 跳过多少页
+        order: [
+            ['id', 'desc']
+        ],
+        include: [
+            {
+                model: User,
+                attributes: ['userName', 'nickName', 'picture']
+            },
+            {
+                model: UserRelation,
+                attributes: ['userId', 'followerId'],
+                where: {
+                    userId
+                }
+            }
+        ]
+    })
+
+    // 格式化数据
+    let blogList = result.rows.map(row => row.dataValues)
+    blogList = blogList.map(blogItem => {
+        blogItem.user = blogItem.user.dataValues
+        blogItem.user = formatUser(blogItem.user)
+        return blogItem
+    })
+
+    return {
+        count: result.count,
+        blogList
+    }
+}
+
 module.exports =  {
     createBlog,
-    getBlogListByUser
+    getBlogListByUser,
+    getFollowersBlogList
 }
