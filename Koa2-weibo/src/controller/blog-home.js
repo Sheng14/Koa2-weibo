@@ -27,9 +27,13 @@ async function create ({ content, image, userId }) {
     }
 }
 
-
+/**
+ * 获取微博首页数据
+ * @param {Number} userId 
+ * @param {Number} pageIndex 
+ */
 async function getHomeBlogList (userId, pageIndex = 0) {
-    const res = await getFollowersBlogList({userId, pageIndex, PAGE_SIZE})
+    const res = await getFollowersBlogList({userId, pageIndex, pageSize: PAGE_SIZE})
     const { count, blogList } = res
     return new SuccessModel({ // 返回前端首页需要的数据
         isEmpty: blogList.length === 0,
