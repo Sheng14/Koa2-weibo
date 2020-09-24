@@ -28,3 +28,17 @@ test('创建一条微博，应该成功', async () => {
     // 记录当前微博id
     BLOG_ID = res.body.data.id
 })
+
+test('测试首页，加载第一条数据', async () => {
+    const res = await server
+        .get(`/api/blog/loadMore/0`) // 假设测试的是测试用户名的第一页微博数据
+        .set('cookie', COOKIE) // 设置cookie
+    expect(res.body.errno).toBe(0) // 希望这个请求并不会错误
+
+    const data = res.body.data // 测试这个数据是否包含以下所有的属性
+    expect(data).toHaveProperty('isEmpty')
+    expect(data).toHaveProperty('blogList')
+    expect(data).toHaveProperty('pageSize')
+    expect(data).toHaveProperty('pageIndex')
+    expect(data).toHaveProperty('count')
+})
