@@ -59,3 +59,15 @@ test('Dark取消关注Ace，应该成功', async () => {
         .set('cookie', D_COOKIE)
     expect(res.body.errno).toBe(0)
 })
+
+// 获取at关注人列表
+test('Dark关注了Ace，关注列表应该有Ace', async () => {
+    const res = await server
+        .get('/api/user/getAtList')
+        .set('cookie', D_COOKIE) // 发送D的cookie查看D的关注人列表
+    const atList = res.body // 拿到关注人列表
+    const hasUserName = atList.some(item => { // 判断是否有一个关注人是A的用户名
+        return item.indexOf(`- ${A_USER_NAME}`) > 0
+    })
+    expect(hasUserName).toBe(true)
+})

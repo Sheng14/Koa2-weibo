@@ -5,11 +5,11 @@
 
 module.exports = {
     USER_NAME: 'Ace',
-    COOKIE: 'weibo.sid=V0GT8SnI8bndreeMwc5Ij2DrCIPAkE-3; weibo.sid.sig=qe1RPzTz0fB-Qhd9fSPO9cUv29A',
+    COOKIE: 'weibo.sid=dZxOtWpQZ4CqyJNxy69W-f0Gb2hA6TGh; weibo.sid.sig=E5zudSteKJWK1yGKYIPEG7NvCLE',
     A_USER_NAME: 'Ace',
-    A_COOKIE: 'weibo.sid=V0GT8SnI8bndreeMwc5Ij2DrCIPAkE-3; weibo.sid.sig=qe1RPzTz0fB-Qhd9fSPO9cUv29A',
+    A_COOKIE: 'weibo.sid=dZxOtWpQZ4CqyJNxy69W-f0Gb2hA6TGh; weibo.sid.sig=E5zudSteKJWK1yGKYIPEG7NvCLE',
     A_ID: 1,
     D_USER_NAME: 'Dark',
-    D_COOKIE: 'weibo.sid=V0GT8SnI8bndreeMwc5Ij2DrCIPAkE-3; weibo.sid.sig=qe1RPzTz0fB-Qhd9fSPO9cUv29A',
+    D_COOKIE: 'weibo.sid=dZxOtWpQZ4CqyJNxy69W-f0Gb2hA6TGh; weibo.sid.sig=E5zudSteKJWK1yGKYIPEG7NvCLE',
     D_ID: 2
 }
