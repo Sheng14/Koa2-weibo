@@ -4,7 +4,7 @@
  */
 
 const { Blog, User, UserRelation } = require('../db/model/index')
-const { formatUser } = require('./_format')
+const { formatUser, formatBlog } = require('./_format')
 
 /**
  * 创建微博
@@ -47,6 +47,7 @@ async function getBlogListByUser ({ userName, pageIndex=0, pageSize=10 }) {
     console.log(result) // 结果是一个数组
     let blogList = result.rows.map(row => row.dataValues) // 数组的每一项的dataValues包含bloglist和user模型的数据
     console.log(blogList)
+    blogList = formatBlog(blogList)
     blogList = blogList.map(item => { // 将每一个user提出来赋值给bloglist
         const user = item.user.dataValues
         item.user = formatUser(user)
@@ -87,6 +88,7 @@ async function getFollowersBlogList ({userId, pageIndex = 0, pageSize = 10}) {
 
     // 格式化数据
     let blogList = result.rows.map(row => row.dataValues)
+    blogList = formatBlog(blogList)
     blogList = blogList.map(blogItem => {
         blogItem.user = blogItem.user.dataValues
         blogItem.user = formatUser(blogItem.user)
