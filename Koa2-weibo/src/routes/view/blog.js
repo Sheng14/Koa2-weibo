@@ -10,7 +10,7 @@ const { getSquareBlogList } = require('../../controller/blog-square')
 const { getFans, getFollowers } = require('../../controller/user-relation')
 const { isExist } = require('../../controller/user')
 const { getHomeBlogList } = require('../../controller/blog-home')
-const { getMeCount, getAtMeBlogList } = require('../../controller/blog-at')
+const { getMeCount, getAtMeBlogList, markAsRead } = require('../../controller/blog-at')
 
 // 首页
 router.get('/', loginRedirect, async (ctx, next) => { // 真正的微博首页
@@ -173,6 +173,10 @@ router.get('/at-me', loginCheck, async (ctx, next) => {
             count
         }
     })
+    // 标记为已读
+    if (atCount > 0) {
+        await markAsRead(userId)
+    }
 })
 
 module.exports = router
