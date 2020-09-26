@@ -10,6 +10,7 @@ const { getSquareBlogList } = require('../../controller/blog-square')
 const { getFans, getFollowers } = require('../../controller/user-relation')
 const { isExist } = require('../../controller/user')
 const { getHomeBlogList } = require('../../controller/blog-home')
+const { getMeCount } = require('../../controller/blog-at')
 
 // 首页
 router.get('/', loginRedirect, async (ctx, next) => { // 真正的微博首页
@@ -27,6 +28,10 @@ router.get('/', loginRedirect, async (ctx, next) => { // 真正的微博首页
     // 获取关注人列表
     const followersResult = await getFollowers(userId)
     const { count: followersCount, followersList } = followersResult.data
+
+    // 获取@数量
+    const atCountResult = await getMeCount(userId)
+    const { count: atCount } = atCountResult.data
     
     await ctx.render('index', {
         userData: {
@@ -38,7 +43,8 @@ router.get('/', loginRedirect, async (ctx, next) => { // 真正的微博首页
             followersData: {
                 count: followersCount,
                 list: followersList
-            }            
+            },
+            atCount         
         },
         blogData: {
             isEmpty,
@@ -99,6 +105,11 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
         return item.userName === myUserName
     })
 
+    // 获取@数量
+    const atCountResult = await getMeCount(myUserInfo.id) // 自己才能看到多少@，其它人看到的是关注/取消关注
+    const { count: atCount } = atCountResult.data
+    console.log('ccccc', atCount)
+
     // 返回给前端模板
     await ctx.render('profile', {
         blogData: {
@@ -120,7 +131,8 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
             followersData: {
                 count: followersCuont,
                 list: followersList
-            }
+            },
+            atCount
         }
     })
 })
